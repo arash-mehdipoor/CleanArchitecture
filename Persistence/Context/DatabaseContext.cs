@@ -1,6 +1,6 @@
-﻿using Domain.Attributes;
+﻿using Application.Interfaces.Context;
+using Domain.Attributes;
 using Domain.Users;
-using Infrastructure.Interfaces.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,9 +13,8 @@ namespace Persistence.Context
 {
     public class DatabaseContext : DbContext, IDatabaseContext
     {
-        public DbSet<User> Users { get; set; }
-
-        public DatabaseContext(DbContextOptions options) : base(options)
+ 
+        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
         }
 
