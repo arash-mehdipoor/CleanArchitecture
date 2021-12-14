@@ -2,6 +2,7 @@
 using Application.Interfaces.Context;
 using Domain.Visitors;
 using MongoDB.Driver;
+using System;
 
 namespace Application.Visitors.SaveVisitorInfo
 {
@@ -32,6 +33,7 @@ namespace Application.Visitors.SaveVisitorInfo
                     IsSpider = request.Device.IsSpider,
                     Model = request.Device.Model
                 },
+                VisitorId = request.VisitorId,
                 IP = request.Ip,
                 Method = request.Method,
                 OperationSystem = new VisitorVersion
@@ -41,7 +43,8 @@ namespace Application.Visitors.SaveVisitorInfo
                 },
                 PhysicalPath = request.PhysicalPath,
                 Protocol = request.Protocol,
-                ReferrerLink = request.ReferrerLink
+                ReferrerLink = request.ReferrerLink,
+                Time = DateTime.Now
             });
         }
     }

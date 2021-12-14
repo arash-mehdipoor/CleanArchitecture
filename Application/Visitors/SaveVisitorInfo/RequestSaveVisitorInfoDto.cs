@@ -2,6 +2,7 @@
 {
     public class RequestSaveVisitorInfoDto
     {
+        public string VisitorId { get; set; }
         public string Ip { get; set; }
         public string CurrentLink { get; set; }
         public string ReferrerLink { get; set; }

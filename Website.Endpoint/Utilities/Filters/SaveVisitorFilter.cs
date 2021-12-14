@@ -1,4 +1,5 @@
 ﻿using Application.Visitors.SaveVisitorInfo;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,17 @@ namespace Website.Endpoint.Utilities.Filters
             string referer = context.HttpContext.Request.Headers["Referer"].ToString();
             var currentUrl = context.HttpContext.Request.Path;
             var request = context.HttpContext.Request;
-
+            var visitorId = context.HttpContext.Request.Cookies["visitorId"];
+            if (visitorId == null)
+            {
+                visitorId = Guid.NewGuid().ToString();
+                context.HttpContext.Response.Cookies.Append("visitorId", visitorId, new CookieOptions()
+                {
+                    Path = "/",
+                    HttpOnly = true,
+                    Expires = DateTime.Now.AddDays(30)
+                });
+            }
 
             _saveVisitorInfoService.Execute(new RequestSaveVisitorInfoDto()
             {
@@ -52,6 +63,7 @@ namespace Website.Endpoint.Utilities.Filters
                     IsSpider = clientInfo.Device.IsSpider,
                     Model = clientInfo.Device.Model
                 },
+                VisitorId = visitorId,
                 Ip = ip,
                 Method = request.Method,
                 PhysicalPath = $"{controllerName}/{actionName}",
