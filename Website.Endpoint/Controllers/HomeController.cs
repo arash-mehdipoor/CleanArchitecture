@@ -7,9 +7,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Website.Endpoint.Models;
+using Website.Endpoint.Utilities.Filters;
 
 namespace Website.Endpoint.Controllers
 {
+    [ServiceFilter(typeof(SaveVisitorFilter))]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

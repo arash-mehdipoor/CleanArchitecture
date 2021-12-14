@@ -1,3 +1,5 @@
+using Application.Interfaces.Context;
+using Application.Visitors.SaveVisitorInfo;
 using Infrastructure.IdentityConfigs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,10 +9,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Persistence.Context;
+using Persistence.Context.MongoContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Website.Endpoint.Utilities.Filters;
 
 namespace Website.Endpoint
 {
@@ -41,6 +45,10 @@ namespace Website.Endpoint
                 option.AccessDeniedPath = "/Account/AccessDenied";
                 option.SlidingExpiration = true;
             });
+
+            services.AddTransient(typeof(IMongoDbContext<>), typeof(MongoDbContext<>));
+            services.AddTransient<ISaveVisitorInfoService, SaveVisitorInfoService>();
+            services.AddScoped<SaveVisitorFilter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
