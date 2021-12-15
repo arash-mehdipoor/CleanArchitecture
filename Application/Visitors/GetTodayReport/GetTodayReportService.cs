@@ -16,7 +16,7 @@ namespace Application.Visitors.GetTodayReport
             _mongoDbContext = mongoDbContext;
             _visitorMongoCollection = _mongoDbContext.GetCollection();
         }
-        public ResultTodayReportDto Exequte()
+        public ResultTodayReportDto Execute()
         {
             DateTime startDate = DateTime.Now.Date;
             DateTime endDate = DateTime.Now.AddDays(1);
@@ -31,19 +31,31 @@ namespace Application.Visitors.GetTodayReport
 
             return new ResultTodayReportDto()
             {
-                GeneralStatesDto = new GeneralStatesDto()
+                GeneralStats = new GeneralStatesDto()
                 {
                     TotalVisitors = allVisitorCount,
                     TotalPageView = allPageViewCount,
-                    PageViewsPerVisit = (allPageViewCount / allVisitorCount) == 0 ? 0 : (allPageViewCount / allVisitorCount)
+                    PageViewsPerVisit = GetAvg(allPageViewCount, allVisitorCount)
                 },
-                TodayDto = new TodayDto()
+                Today = new TodayDto()
                 {
                     PageViews = todayPageViewCount,
                     Visitors = totalVisitorCount,
-                    ViewsPerVisitor = (todayPageViewCount / totalVisitorCount) == 0 ? 0 : (todayPageViewCount / totalVisitorCount)
+                    ViewsPerVisitor = GetAvg(todayPageViewCount, totalVisitorCount)
                 }
             };
+        }
+
+        public float GetAvg(long visitPage, long visitor)
+        {
+            if (visitor == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return visitPage / visitor;
+            }
         }
     }
 }

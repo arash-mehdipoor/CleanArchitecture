@@ -2,7 +2,7 @@
 {
     public class ResultTodayReportDto
     {
-        public GeneralStatesDto GeneralStatesDto { get; set; }
-        public TodayDto TodayDto { get; set; }
+        public GeneralStatesDto GeneralStats { get; set; }
+        public TodayDto Today { get; set; }
     }
 }

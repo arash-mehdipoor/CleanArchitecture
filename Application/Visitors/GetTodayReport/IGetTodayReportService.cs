@@ -6,6 +6,6 @@ namespace Application.Visitors.GetTodayReport
 {
     public interface IGetTodayReportService
     {
-        ResultTodayReportDto Exequte();
+        ResultTodayReportDto Execute();
     }
 }

@@ -75,8 +75,7 @@ namespace Website.Endpoint.Utilities.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            throw new NotImplementedException();
-        }
+         }
 
     }
 }
