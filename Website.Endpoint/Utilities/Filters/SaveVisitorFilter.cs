@@ -1,4 +1,4 @@
-﻿using Application.Visitors.SaveVisitorInfo;
+﻿    using Application.Visitors.SaveVisitorInfo;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -32,16 +32,7 @@ namespace Website.Endpoint.Utilities.Filters
             var currentUrl = context.HttpContext.Request.Path;
             var request = context.HttpContext.Request;
             var visitorId = context.HttpContext.Request.Cookies["visitorId"];
-            if (visitorId == null)
-            {
-                visitorId = Guid.NewGuid().ToString();
-                context.HttpContext.Response.Cookies.Append("visitorId", visitorId, new CookieOptions()
-                {
-                    Path = "/",
-                    HttpOnly = true,
-                    Expires = DateTime.Now.AddDays(30)
-                });
-            }
+            
 
             _saveVisitorInfoService.Execute(new RequestSaveVisitorInfoDto()
             {
