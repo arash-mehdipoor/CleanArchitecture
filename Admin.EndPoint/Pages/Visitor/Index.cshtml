@@ -153,7 +153,7 @@
                                 <th><div class="th-content">Ip</div></th>
                                 <th><div class="th-content">لینک</div></th>
                                 <th><div class="th-content">لینک ارجاع</div></th>
-                                <th><div class="th-content th-heading">مرمرگر</div></th>
+                                <th><div class="th-content th-heading">مرورگر</div></th>
                                 <th><div class="th-content"> سیستم عامل </div></th>
                                 <th><div class="th-content"> خزنده؟ </div></th>
                                 <th><div class="th-content"> زمان </div></th>
@@ -161,7 +161,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @*@foreach (var item in Model.ResultTodayReport.visitors)
+                            @foreach (var item in Model.ResultTodayReport.visitors)
                             {
                                 <tr>
                                     <td><div class="td-content product-brand">@item.Ip</div></td>
@@ -189,7 +189,7 @@
                                     <td><div class="td-content"><span class="badge outline-badge-primary">@item.VisitorId</span></div></td>
 
                                 </tr>
-                            }*@ 
+                            } 
                         </tbody>
                     </table>
                 </div>
@@ -233,7 +233,7 @@
     <script src="~/Theme/assets/js/scrollspyNav.js"></script>
     <script src="~/Theme/assets/js/dashboard/dash_1.js"></script>
     <script src="~/Theme/plugins/apex/apexcharts.min.js"></script>
-    @*<script>
+    <script>
 
     var DisplayHour=@Html.Raw(Json.Serialize(Model.ResultTodayReport.Today.VisitPerhour.Display));
     var ValueHour=@Html.Raw(Json.Serialize(Model.ResultTodayReport.Today.VisitPerhour.Value));
@@ -336,5 +336,5 @@
             slineDay
         );
         chartDay.render();
-    </script>*@
+    </script>
 }
