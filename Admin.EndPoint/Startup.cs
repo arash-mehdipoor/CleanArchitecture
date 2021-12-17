@@ -1,11 +1,16 @@
+using Admin.EndPoint.MappingProfiles;
+using Application.Catalogs.CatalogTypes;
 using Application.Interfaces.Context;
 using Application.Visitors.GetTodayReport;
+using Infrastructure.MappingProfile;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Persistence.Context;
 using Persistence.Context.MongoContext;
 using System;
 using System.Collections.Generic;
@@ -27,8 +32,20 @@ namespace Admin.EndPoint
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddTransient<ICatalogTypeService, CatalogTypeService>();
             services.AddTransient(typeof(IMongoDbContext<>), typeof(MongoDbContext<>));
             services.AddTransient<IGetTodayReportService, GetTodayReportService>();
+
+
+            #region ConnectionString
+            services.AddScoped<IDatabaseContext, DatabaseContext>();
+            string connection = Configuration["ConnectionString:SqlServerCnn"];
+            services.AddDbContext<DatabaseContext>(option => option.UseSqlServer(connection));
+            #endregion
+
+            //mapper
+            services.AddAutoMapper(typeof(CatalogMappingProfile));
+            services.AddAutoMapper(typeof(CatalogVMMappingProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

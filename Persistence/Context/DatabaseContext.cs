@@ -1,7 +1,9 @@
 ﻿using Application.Interfaces.Context;
 using Domain.Attributes;
+using Domain.Catalogs;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Seeds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,23 +15,29 @@ namespace Persistence.Context
 {
     public class DatabaseContext : DbContext, IDatabaseContext
     {
- 
+
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
         }
 
+        public DbSet<CatalogBrand> CatalogBrands { get; set; }
+        public DbSet<CatalogType> CatalogTypes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
+
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 if (entityType.ClrType.GetCustomAttributes(typeof(AuditAttribute), true).Length > 0)
                 {
-                    modelBuilder.Entity(entityType.Name).Property<DateTime>("InsertTime");
+                    modelBuilder.Entity(entityType.Name).Property<DateTime>("InsertTime").HasDefaultValue(DateTime.Now);
                     modelBuilder.Entity(entityType.Name).Property<DateTime?>("UpdateTime");
                     modelBuilder.Entity(entityType.Name).Property<DateTime?>("RemoveTime");
-                    modelBuilder.Entity(entityType.Name).Property<bool>("IsRemoved");
+                    modelBuilder.Entity(entityType.Name).Property<bool>("IsRemoved").HasDefaultValue(false);
                 }
             }
+            DataBaseContextSeed.CatalogSeed(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
 
@@ -56,6 +64,7 @@ namespace Persistence.Context
                 {
                     item.Property("RemoveTime").CurrentValue = DateTime.Now;
                     item.Property("IsRemoved").CurrentValue = true;
+                    item.State = EntityState.Modified;
                 }
             }
 
