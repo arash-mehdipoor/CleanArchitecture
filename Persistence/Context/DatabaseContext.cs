@@ -38,6 +38,9 @@ namespace Persistence.Context
                 }
             }
             DataBaseContextSeed.CatalogSeed(modelBuilder);
+            modelBuilder.Entity<CatalogType>()
+                .HasQueryFilter(m => EF.Property<bool>(m, "IsRemoved") == false);
+
             base.OnModelCreating(modelBuilder);
         }
 

@@ -1,7 +1,9 @@
+using Application.Catalogs.GetMenuItem;
 using Application.Interfaces.Context;
 using Application.Visitors.SaveVisitorInfo;
 using Application.Visitors.VisitorOnline;
 using Infrastructure.IdentityConfigs;
+using Infrastructure.MappingProfile;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,6 +40,7 @@ namespace Website.Endpoint
             #region ConnectionString
             string connection = Configuration["ConnectionString:SqlServerCnn"];
             services.AddDbContext<DatabaseContext>(option => option.UseSqlServer(connection));
+            services.AddScoped<IDatabaseContext, DatabaseContext>();
             #endregion
             services.AddIdentityService(Configuration);
             services.AddAuthentication();
@@ -52,7 +55,9 @@ namespace Website.Endpoint
             services.AddTransient(typeof(IMongoDbContext<>), typeof(MongoDbContext<>));
             services.AddTransient<ISaveVisitorInfoService, SaveVisitorInfoService>();
             services.AddTransient<IVisitorOnlineService, VisitorOnlineService>();
+            services.AddTransient<IGetMenuItemService, GetMenuItemService>();
             services.AddScoped<SaveVisitorFilter>();
+            services.AddAutoMapper(typeof(CatalogMappingProfile));
             services.AddSignalR();
         }
 
