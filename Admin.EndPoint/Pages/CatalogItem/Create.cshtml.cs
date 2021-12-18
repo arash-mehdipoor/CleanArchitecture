@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Catalogs.CatalogItems.AddNewCatalogItem;
 using Application.Catalogs.CatalogItems.CatalogItemService;
 using Application.Dtos;
+using Infrastructure.ExternalApi.ImageServer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,12 +17,16 @@ namespace Admin.EndPoint.Pages.CatalogItem
     {
         private readonly IAddNewCatalogItemService _addNewCatalogItemService;
         private readonly ICatalogItemService _catalogItemService;
+        private readonly IImageUploadService _imageUploadService;
 
         public CreateModel(IAddNewCatalogItemService addNewCatalogItemService,
-            ICatalogItemService catalogItemService)
+            ICatalogItemService catalogItemService,
+            IImageUploadService imageUploadService
+            )
         {
             _addNewCatalogItemService = addNewCatalogItemService;
             _catalogItemService = catalogItemService;
+            _imageUploadService = imageUploadService;
         }
         [BindProperty]
         public AddNewCatalogItemDto Data { get; set; }
@@ -49,11 +54,15 @@ namespace Admin.EndPoint.Pages.CatalogItem
             }
 
             List<AddNewCatalogItemImage_Dto> images = new List<AddNewCatalogItemImage_Dto>();
-            if (Files.Count > 0 )
+            if (Files.Count > 0)
             {
-
+                var imageAddress = _imageUploadService.Upload(Files);
+                foreach (var item in imageAddress)
+                {
+                    images.Add(new AddNewCatalogItemImage_Dto() { Src = item });
+                }
             }
-            //Data.Images = 
+            Data.Images = images;
             var resultService = _addNewCatalogItemService.Execute(Data);
             return new JsonResult(resultService);
         }

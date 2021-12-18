@@ -5,6 +5,7 @@ using Application.Catalogs.CatalogTypes;
 using Application.Interfaces.Context;
 using Application.Visitors.GetTodayReport;
 using FluentValidation;
+using Infrastructure.ExternalApi.ImageServer;
 using Infrastructure.MappingProfile;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,6 +41,7 @@ namespace Admin.EndPoint
             services.AddTransient<IGetTodayReportService, GetTodayReportService>();
             services.AddTransient<IAddNewCatalogItemService, AddNewCatalogItemService>();
             services.AddTransient<ICatalogItemService, CatalogItemService>();
+            services.AddTransient<IImageUploadService, ImageUploadService>();
             services.AddTransient<IValidator<AddNewCatalogItemDto>, AddNewCatalogItemDtoValidator>();
             #region ConnectionString
             services.AddScoped<IDatabaseContext, DatabaseContext>();
