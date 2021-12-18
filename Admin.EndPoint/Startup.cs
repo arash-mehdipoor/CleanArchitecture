@@ -1,7 +1,10 @@
 using Admin.EndPoint.MappingProfiles;
+using Application.Catalogs.CatalogItems.AddNewCatalogItem;
+using Application.Catalogs.CatalogItems.CatalogItemService;
 using Application.Catalogs.CatalogTypes;
 using Application.Interfaces.Context;
 using Application.Visitors.GetTodayReport;
+using FluentValidation;
 using Infrastructure.MappingProfile;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,8 +38,9 @@ namespace Admin.EndPoint
             services.AddTransient<ICatalogTypeService, CatalogTypeService>();
             services.AddTransient(typeof(IMongoDbContext<>), typeof(MongoDbContext<>));
             services.AddTransient<IGetTodayReportService, GetTodayReportService>();
-
-
+            services.AddTransient<IAddNewCatalogItemService, AddNewCatalogItemService>();
+            services.AddTransient<ICatalogItemService, CatalogItemService>();
+            services.AddTransient<IValidator<AddNewCatalogItemDto>, AddNewCatalogItemDtoValidator>();
             #region ConnectionString
             services.AddScoped<IDatabaseContext, DatabaseContext>();
             string connection = Configuration["ConnectionString:SqlServerCnn"];
