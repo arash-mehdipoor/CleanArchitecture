@@ -1,24 +1,11 @@
-using Application.Catalogs.GetMenuItem;
-using Application.Interfaces.Context;
-using Application.Visitors.SaveVisitorInfo;
-using Application.Visitors.VisitorOnline;
 using Infrastructure.IdentityConfigs;
-using Infrastructure.MappingProfile;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Persistence.Context;
-using Persistence.Context.MongoContext;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Website.Endpoint.Hubs;
-using Website.Endpoint.Utilities.Filters;
+using Website.Endpoint.Utilities;
 using Website.Endpoint.Utilities.MiddleWare;
 
 namespace Website.Endpoint
@@ -36,29 +23,8 @@ namespace Website.Endpoint
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
-            #region ConnectionString
-            string connection = Configuration["ConnectionString:SqlServerCnn"];
-            services.AddDbContext<DatabaseContext>(option => option.UseSqlServer(connection));
-            services.AddScoped<IDatabaseContext, DatabaseContext>();
-            #endregion
-            services.AddIdentityService(Configuration);
-            services.AddAuthentication();
-            services.ConfigureApplicationCookie(option =>
-            {
-                option.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-                option.LoginPath = "/Account/Login";
-                option.AccessDeniedPath = "/Account/AccessDenied";
-                option.SlidingExpiration = true;
-            });
-
-            services.AddTransient(typeof(IMongoDbContext<>), typeof(MongoDbContext<>));
-            services.AddTransient<ISaveVisitorInfoService, SaveVisitorInfoService>();
-            services.AddTransient<IVisitorOnlineService, VisitorOnlineService>();
-            services.AddTransient<IGetMenuItemService, GetMenuItemService>();
-            services.AddScoped<SaveVisitorFilter>();
-            services.AddAutoMapper(typeof(CatalogMappingProfile));
-            services.AddSignalR();
+            services.AddIdentityService(Configuration); 
+            services.AddServiceProject(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

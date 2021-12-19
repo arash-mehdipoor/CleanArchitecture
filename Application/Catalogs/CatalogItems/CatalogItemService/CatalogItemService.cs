@@ -1,5 +1,7 @@
-﻿using Application.Interfaces.Context;
+﻿using Application.Dtos;
+using Application.Interfaces.Context;
 using AutoMapper;
+using Common;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,5 +47,42 @@ namespace Application.Catalogs.CatalogItems.CatalogItemService
                 }).ToList();
             return types;
         }
+
+        public PaginatedItemsDto<CatalogItemListItemDto> GetCatalogList(int page, int pageSize)
+        {
+            int rowCount = 0;
+            var data = context.CatalogItems
+                .Include(p => p.CatalogType)
+                .Include(p => p.CatalogBrand)
+                .ToPaged(page, pageSize, out rowCount)
+                .OrderByDescending(p => p.Id)
+                .Select(p => new CatalogItemListItemDto
+                {
+                    Id = p.Id,
+                    Brand = p.CatalogBrand.Brand,
+                    Type = p.CatalogType.Type,
+                    AvailableStock = p.AvailableStock,
+                    MaxStockThreshold = p.MaxStockThreshold,
+                    RestockThreshold = p.RestockThreshold,
+                    Name = p.Name,
+                    Price = p.Price,
+                }).ToList();
+
+            return new PaginatedItemsDto<CatalogItemListItemDto>(page, page, rowCount, data);
+
+        }
+
+        public class CatalogItemListItemDto
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public int Price { get; set; }
+            public string Type { get; set; }
+            public string Brand { get; set; }
+            public int AvailableStock { get; set; }
+            public int RestockThreshold { get; set; }
+            public int MaxStockThreshold { get; set; }
+        }
+
     }
 }
