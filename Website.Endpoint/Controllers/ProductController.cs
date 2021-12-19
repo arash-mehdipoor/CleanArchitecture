@@ -1,4 +1,5 @@
 ﻿using Application.Catalogs.CatalogItems.GetCatalogIItemPLP;
+using Application.Catalogs.CatalogItems.GetCatalogItemPDP;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Website.Endpoint.Controllers
@@ -6,9 +7,10 @@ namespace Website.Endpoint.Controllers
     public class ProductController : Controller
     {
         private readonly IGetCatalogIItemPLPService getCatalogIItemPLPService;
- 
+        private readonly IGetCatalogItemPDPService getCatalogItemPDPService;
         public ProductController(IGetCatalogIItemPLPService
-            getCatalogIItemPLPService)
+            getCatalogIItemPLPService
+            , IGetCatalogItemPDPService getCatalogItemPDPService)
         {
             this.getCatalogIItemPLPService = getCatalogIItemPLPService; 
         }
@@ -18,6 +20,11 @@ namespace Website.Endpoint.Controllers
             return View(data);
         }
 
-       
+        public IActionResult Details(int Id)
+        {
+            var data = getCatalogItemPDPService.Execute(Id);
+            return View(data);
+        }
+
     }
 }
