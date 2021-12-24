@@ -12,6 +12,7 @@ using Persistence.Context.MongoContext;
 using System;
 using Website.Endpoint.Utilities.Filters;
 using Infrastructure.MappingProfile;
+using Application.Catalogs.CatalogItems.GetCatalogItemPDP;
 
 namespace Website.Endpoint.Utilities
 {
@@ -40,6 +41,7 @@ namespace Website.Endpoint.Utilities
             services.AddTransient<IVisitorOnlineService, VisitorOnlineService>();
             services.AddTransient<IGetMenuItemService, GetMenuItemService>();
             services.AddTransient<IGetCatalogIItemPLPService, GetCatalogIItemPLPService>();
+            services.AddTransient<IGetCatalogItemPDPService, GetCatalogItemPDPService>();
             services.AddTransient<IUriComposerService, UriComposerService>(); 
             services.AddScoped<SaveVisitorFilter>();
             services.AddAutoMapper(typeof(CatalogMappingProfile));
