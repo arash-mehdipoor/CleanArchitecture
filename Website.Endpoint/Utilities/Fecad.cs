@@ -13,6 +13,7 @@ using System;
 using Website.Endpoint.Utilities.Filters;
 using Infrastructure.MappingProfile;
 using Application.Catalogs.CatalogItems.GetCatalogItemPDP;
+using Application.BasketService;
 
 namespace Website.Endpoint.Utilities
 {
@@ -42,6 +43,7 @@ namespace Website.Endpoint.Utilities
             services.AddTransient<IGetMenuItemService, GetMenuItemService>();
             services.AddTransient<IGetCatalogIItemPLPService, GetCatalogIItemPLPService>();
             services.AddTransient<IGetCatalogItemPDPService, GetCatalogItemPDPService>();
+            services.AddTransient<IBasketService, BasketService>();
             services.AddTransient<IUriComposerService, UriComposerService>(); 
             services.AddScoped<SaveVisitorFilter>();
             services.AddAutoMapper(typeof(CatalogMappingProfile));

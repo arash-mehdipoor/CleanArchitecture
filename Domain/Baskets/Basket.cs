@@ -18,7 +18,7 @@ namespace Domain.Baskets
         {
             this.BuyerId = buyerId;
         }
-        public ICollection<BasketItem> BasketItems => _items.AsReadOnly();
+        public ICollection<BasketItem> Items => _items.AsReadOnly();
 
         public void AddItem(int unitPrice, int quantity, int catalogItemId)
         {

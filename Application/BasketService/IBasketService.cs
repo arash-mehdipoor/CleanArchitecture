@@ -13,6 +13,9 @@ namespace Application.BasketService
     public interface IBasketService
     {
         BasketDto GetOrCreateBasketForUser(string buyerId);
+        void AddItemToBasket(int baksetId, int catalogItemId, int quantity);
+        bool RemoveItemFromBasket(int ItemId);
+        bool SetQuantities(int itemId, int quantity);
     }
 
     public class BasketService : IBasketService
@@ -27,10 +30,22 @@ namespace Application.BasketService
             this.uriComposerService = uriComposerService;
         }
 
+        public void AddItemToBasket(int baksetId, int catalogItemId, int quantity)
+        {
+            var basket = context.Baskets.FirstOrDefault(b => b.Id == baksetId);
+            if (basket == null)
+            {
+                throw new Exception("");
+            }
+            var catalogItem = context.CatalogItems.Find(catalogItemId);
+            basket.AddItem(catalogItem.Price, quantity, catalogItemId);
+            context.SaveChanges();
+        }
+
         public BasketDto GetOrCreateBasketForUser(string buyerId)
         {
             var basket = context.Baskets
-               .Include(p => p.BasketItems)
+               .Include(p => p.Items)
                .ThenInclude(p => p.CatalogItem)
                .ThenInclude(p => p.CatalogItemImages)
                .SingleOrDefault(p => p.BuyerId == buyerId);
@@ -42,7 +57,7 @@ namespace Application.BasketService
             {
                 Id = basket.Id,
                 BuyerId = basket.BuyerId,
-                Items = basket.BasketItems.Select(item => new BasketItemDto
+                Items = basket.Items.Select(item => new BasketItemDto
                 {
                     CatalogItemId = item.CatalogItemId,
                     Id = item.Id,
@@ -56,6 +71,23 @@ namespace Application.BasketService
             };
 
         }
+
+        public bool RemoveItemFromBasket(int ItemId)
+        {
+            var item = context.BasketItems.SingleOrDefault(b => b.Id == ItemId);
+            context.BasketItems.Remove(item);
+            context.SaveChanges();
+            return true;
+        }
+
+        public bool SetQuantities(int itemId, int quantity)
+        {
+            var item = context.BasketItems.SingleOrDefault(p => p.Id == itemId);
+            item.SetQuantity(quantity);
+            context.SaveChanges();
+            return true;
+        }
+
         private BasketDto CreateBasketForUser(string BuyerId)
         {
             Basket basket = new Basket(BuyerId);

@@ -44,6 +44,10 @@ namespace Persistence.Context
             DataBaseContextSeed.CatalogSeed(modelBuilder);
             modelBuilder.Entity<CatalogType>()
                 .HasQueryFilter(m => EF.Property<bool>(m, "IsRemoved") == false);
+            modelBuilder.Entity<Basket>()
+              .HasQueryFilter(m => EF.Property<bool>(m, "IsRemoved") == false);
+            modelBuilder.Entity<BasketItem>()
+              .HasQueryFilter(m => EF.Property<bool>(m, "IsRemoved") == false);
 
             base.OnModelCreating(modelBuilder);
         }
