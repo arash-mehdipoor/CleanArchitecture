@@ -13,6 +13,7 @@ namespace Website.Endpoint.Controllers
             , IGetCatalogItemPDPService getCatalogItemPDPService)
         {
             this.getCatalogIItemPLPService = getCatalogIItemPLPService; 
+            this.getCatalogItemPDPService = getCatalogItemPDPService; 
         }
         public IActionResult Index(int page = 1, int pageSize = 20)
         {
